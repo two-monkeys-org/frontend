@@ -58,6 +58,7 @@ function MyApp({ Component, pageProps }) {
       .then((response) => {
         const { SESSION } = response.data;
         document.cookie = `SESSION=${SESSION}`;
+        console.log({ SESSION });
       })
       .catch((err) => console.log(err));
   }, []);
