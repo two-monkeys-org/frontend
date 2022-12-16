@@ -23,72 +23,55 @@ function MyApp({ Component, pageProps }) {
   `;
   const authState = useSelector(selectAuthModalState);
 
-  // axios({
-  //   method: "get",
-  //   url: `http://51.38.130.146:8080/login`,
-  //   withCredentials: false,
-  //   // params: {
-  //   //   access_token: SECRET_TOKEN,
-  //   // },
-  //   headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  // })
-
-  // axios
-  //   .post("http://51.38.130.146:8080/login", data)
-
-  // fetch("http://51.38.130.146:8080/login", {
-  //   method: "POST",
-  //   mode: "no-cors",
-  //   headers: {
-  //     "Content-Type": "application/x-www-form-urlencoded",
-  //     "Cache-Control": "no-cache",
-  //     "Refer-Policy": "no-referrer",
-  //   },
-  //   body: new URLSearchParams(data),
-  // })
-
-  // axios({
-  //   url: "http://51.38.130.146:8080/login",
-  //   method: "get",
-  //   // data: data,
-  //   // headers: {
-  //   //   "Content-Type": "application/x-www-form-urlencoded",
-  //   //   "Cache-Control": "no-cache",
-  //   //   "Refer-Policy": "no-referrer",
-  //   // },
-  // })
-
   useEffect(() => {
-    fetch("http://51.38.130.146:8080/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Access-Control-Allow-Origin": "*",
-      },
-      body: new URLSearchParams({
-        username: "admin@gmail.com",
-        password: "admin",
-      }),
-    }).then(async (response) => {
-      const { SESSION } = await response.json();
-      document.cookie = `SESSION=${SESSION}`;
-    });
+    // fetch("http://51.38.130.146:8080/login", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   },
+    //   body: new URLSearchParams({
+    //     username: "admin@gmail.com",
+    //     password: "admin",
+    //   }),
+    // })
+    //   .then(async (response) => {
+    //     const { SESSION } = await response.json();
+    //     document.cookie = `SESSION=${SESSION}`;
+    //   })
+    //   .catch((err) => {
+    //     console.log("Wypierdalaj pyk pyk pyk");
+    //   });
+
+    axios
+      .post(
+        "http://51.38.130.146:8080/login",
+        {
+          username: "admin@gmail.com",
+          password: "admin",
+        },
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      )
+      .then((response) => {
+        const { SESSION } = response.data;
+        document.cookie = `SESSION=${SESSION}`;
+      })
+      .catch((err) => console.log(err));
   }, []);
 
-  fetch("http://51.38.130.146:8080/user-service/user", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Access-Control-Allow-Origin": "*",
-    },
-    mode: "no-cors",
-  });
-
-  // .then(
-  //   async (response) => {
-  //     console.log(await response.json());
-  //   }
-  // );
+  useEffect(() => {
+    axios
+      .get("http://51.38.130.146:8080/user-service/user", {
+        // uzyj tutaj credentialse
+        headers: {
+          authorization: "Basic " + window.btoa("admin@gmail.com:admin"),
+        },
+      })
+      .then((res) => console.log(res));
+  }, []);
 
   return (
     <>
